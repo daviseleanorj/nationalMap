@@ -871,8 +871,8 @@ var groupedOverlays = {
     //"<img src='assets/img/cm-point.png' width='18' height='18'>&nbsp;Weekly"
   },
   "Reference Layers": {
-    "NC & SC Counties": cnty,
-    //"U.S. Drought Monitor": ndmc_wms,
+    "US Counties": cnty,
+    // "U.S. Drought Monitor": ndmc_wms,
     // "NOAA Climate Div.": climadiv,
     // "Weather Forecast Off.": wfo,
     // "Ecological Regions": eco,

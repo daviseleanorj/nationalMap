@@ -192,7 +192,7 @@ var cnty = L.geoJson(null, {
       var content = "<table class='table table-striped table-bordered table-condensed'>" + "<tr><th>County</th><td>" + feature.properties.cntyname + "</td></tr>" + "<tr><th>State</th><td>" + feature.properties.state + "</td></tr>" + "<table>";
       layer.on({
         click: function (e) {
-          $("#feature-title").html('NC and SC Counties');
+          $("#feature-title").html('US Counties');
           $("#feature-info").html(content);
           $("#featureModal").modal("show");
 
@@ -217,7 +217,7 @@ var cnty = L.geoJson(null, {
     });
   }
 });
-$.getJSON("https://cisa.cartodb.com/api/v2/sql/?format=GeoJSON&q=SELECT * FROM public.us_counties_2013", function (data) {
+$.getJSON("https://cisa.cartodb.com/api/v2/sql/?format=GeoJSON&q=SELECT * FROM uscounties", function (data) {
   cnty.addData(data);
   // addLabel();
 });
