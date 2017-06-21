@@ -48,7 +48,7 @@ var dateURL = getparamsURL()["date"];
 var miliseconds_per_day = 1000*60*60*24;  //converts miliseconds to days
 // var miliseconds_per_week = 1000*7*24*60*60;
 
-var totalDays = (Math.ceil((new Date()- new Date(2013,08,07))/miliseconds_per_day)); //Gives total days in data reports
+var totalDays = (Math.ceil((new Date()- new Date(2016,09,15))/miliseconds_per_day)); //Gives total days in data reports
 
 //2013-09-01
 
@@ -305,7 +305,7 @@ function dateToJulianNumber(d) {
   // w=window.open('text.txt')
   // w.document.write(JD)
   // w.print()
-  // return JD;
+  return JD;
 }   
 
 function julianIntToDate(JD) {
@@ -369,8 +369,9 @@ function getWMSdates() {
     return [tdw,tdw];
 
     //return["current","_current"]
+  } else {
+    return ["current","_current"];
   }
-  return ["current","_current"];
 };
 
 function pad(num, size) {
@@ -935,7 +936,7 @@ $(document).one("ajaxStop", function () {
   $("#loading").hide();
   sizeLayerControl();
   /* Fit map to boroughs bounds */
-  map.fitBounds(state.getBounds());
+  // map.fitBounds(state.getBounds());
   featureList = new List("features", {valueNames: ["feature-name"]});
   featureList.sort("feature-name", {order:"asc"});
 
