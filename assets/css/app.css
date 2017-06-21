@@ -16,6 +16,7 @@ input[type="radio"], input[type="checkbox"] {
   max-width: 100%;
   float: left;
 }
+  
 #map {
   width: auto;
   height: 100%;

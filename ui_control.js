@@ -17,11 +17,11 @@ if ( !("ontouchstart" in window) ) {
 $(document).on("mouseout", ".feature-row", clearHighlight);
 
 
-$("#full-extent-btn").click(function() {
-  map.fitBounds(state.getBounds());
-  $(".navbar-collapse.in").collapse("hide");
-  return false;
-});
+// $("#full-extent-btn").click(function() {
+//   map.fitBounds(state.getBounds());
+//   $(".navbar-collapse.in").collapse("hide");
+//   return false;
+// });
 
 ////Legend Controls////
 
@@ -37,26 +37,9 @@ $("#legend-btn2").click(function() {
   return false;
 });
 
-$("#legend-btn3").click(function() {
-  $("#legendModal_3").modal("show");
-  $(".navbar-collapse.in").collapse("hide");
-  return false;
-});
-
-$("#legend-btn4").click(function() {
-  $("#legendModal_4").modal("show");
-  $(".navbar-collapse.in").collapse("hide");
-  return false;
-});
-
-$("#legend-btn5").click(function() {
-  $("#legendModal_5").modal("show");
-  $(".navbar-collapse.in").collapse("hide");
-  return false;
-});
-
 /////////////
 
+//Reports button//
 $("#list-btn").click(function() {
   animateSidebar();
   alterSliderWidth();
@@ -74,6 +57,7 @@ $("#sidebar-toggle-btn").click(function() {
   return false;
 });
 
+//Chevron next to "Reports of interest"
 $("#sidebar-hide-btn").click(function() {
   animateSidebar();
   alterSliderWidth();

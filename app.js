@@ -87,10 +87,6 @@ function withURL(){
 
 function withoutURL(){
   var slider = document.getElementById('slider');
-  // $.getJSON("https://cisa.cartodb.com/api/v2/sql/?format=GeoJSON&q=SELECT * FROM table_6245450067 WHERE reportdate >= (now() - interval '1 week')", function (data) {
-  //   cmData.addData(data);
-  //   map.addLayer(cmLayer);
-  // });
 
   noUiSlider.create(slider, {
     start: [totalDays],
@@ -123,30 +119,7 @@ function withoutURL(){
   tuesReport = String(tdw.getMonth()+1)+"/"+tdw.getDate()+"/"+String(tdw.getFullYear()).substring(2,4);
 
 $('#daterange').html("Report Date:   " + startreport + " - " + endreport);
-// var slider = document.getElementById('slider');
-// noUiSlider.create(slider, {
-//   start: [ totalDays ],
-//   step: 7,
-//   range: {
-//     'min': [  1 ],
-//     'max': [ totalDays ]
-//   }
-// });
-
-// var ndmc_wms = L.tileLayer.wms( "http://ndmc-001.unl.edu:8080/cgi-bin/mapserv.exe",{
-//     map: "/ms4w/apps/usdm/service/usdm_current_wms.map",
-//     layers: "usdm_current",
-//     styles: "default",
-//     format: "image/png",
-//     crs: L.CRS.EPSG900913,
-//     opacity: .3
-//   });
-// w=window.open('text.txt')
-// w.document.write(ndmc_wms[0][0])
-// w.print()
-//Patch for date issue and not having full week
-//Runs when getJson hits Carto sql API on line 642
-// $('#daterange').html("Condition Monitoring Reports: Last 7 Days");              
+              
 
 //Changes slider date display based on slider postion
 function changeLegend() {
@@ -172,17 +145,6 @@ function changeLegend() {
 
   $('#daterange').html("Report Date:   " + startreport + " - " + endreport);
   
-   // w=window.open('text.txt')
-   // w.document.write(date,dateString)
-   // w.print()
-
-  //var date="current"
-  //var dateString="_current"
-  
-  //map.addLayer(ndmc_wms)
-  //ndmc_wms.addTo(Map)
-  //updateMap()
-
 };
 
 
@@ -192,11 +154,7 @@ slider.noUiSlider.on('set', function(){
   var wmsDates=getWMSdates();
   date=wmsDates[0];
   dateString=wmsDates[1];
-  //ndmc_wms=groupedOverlays["Reference Layers"]["Current USDM"]
-  //map.addLayer(ndmc_wms)
-  //map.removeLayer(ndmc_wms)
   map.removeLayer(groupedOverlays["Reference Layers"][USDM])
-  //map.addLayer(groupedOverlays["Reference Layers"]["Current USDM"])
   groupedOverlays["Reference Layers"][USDM]=L.tileLayer.wms( "http://ndmc-001.unl.edu:8080/cgi-bin/mapserv.exe",{
     map: "/ms4w/apps/usdm/service/usdm_"+date+"_wms.map",
     layers: "usdm"+dateString,
@@ -206,53 +164,23 @@ slider.noUiSlider.on('set', function(){
     opacity: .3
   });
   
-  // L.tileLayer.wms=function(){
-  //   return new L.TileLayer.Wms();
-  // }
-  // L.tileLayer.wms().addTo(map);
-  //ndmc_wms.redraw()
-  //map.addLayer(ndmc_wms)
-
   L.control.groupedLayers(baseLayers, groupedOverlays);
   map.addLayer(groupedOverlays["Reference Layers"][USDM])
   groupedOverlays["Reference Layers"][USDM].addTo(map);
-  //map._onResize();
-    // w=window.open('text.txt')
-    // w.document.write(dateString)
-    // w.print()
-    //delete(ndmc_wms)
 });
 
 
 slider.noUiSlider.on('slide', function(){
     var d = getDateStrings();
     $('#daterange').text(d.f + " - "+ d.l);
-    
-
     clearHighlight();
-    map.removeLayer(cmLayer);
-    //map.removeLayer(groupedOverlays["Reference Layers"]["Current USDM"]);
-    //map.addLayer(ndmc_wms)
-    
+    map.removeLayer(cmLayer);    
     reset_cmData();
 });
 
 tempDates=getWMSdates();
 date1=tempDates[0];
 dateString1=tempDates[1];
-// w=window.open('text.txt')
-// w.document.write(date,dateString)
-// w.print()
-//resetNDMC()
-// var ndmc_wms = L.tileLayer.wms( "http://ndmc-001.unl.edu:8080/cgi-bin/mapserv.exe",{
-//   map: "/ms4w/apps/usdm/service/usdm_"+date1+"_wms.map",
-//   layers: "usdm"+dateString1,
-//   styles: "default",
-//   format: "image/png",
-//   crs: L.CRS.EPSG900913,
-//   opacity: .3
-// });
-
 
 
 function getISOStrings(){
@@ -287,7 +215,6 @@ function getSliderDates() {
 
 function getDate(){
     var d = getISOStrings();
-//https://cocorahs.carto.com:443/api/v2/sql?q=select * from public.yt7qpca3bk929mp27wpcnw
     $.getJSON("https://cocorahs.carto.com:443/api/v2/sql/?format=GeoJSON&q=SELECT * FROM public.yt7qpca3bk929mp27wpcnw WHERE reportdate >= '" + d.f + "' and reportdate <= '" + d.l + "'", function (data) {
         cmData.addData(data);
         map.addLayer(cmLayer);
@@ -302,9 +229,6 @@ function dateToJulianNumber(d) {
   var z = d.getMonth() - 3 + 12 * x;
 
   var JD = d.getDate() + Math.floor(((153 * z) + 2)/5) + (365 * y) + Math.floor(y/4) + Math.floor(y/400) - Math.floor(y/100) - 32045;
-  // w=window.open('text.txt')
-  // w.document.write(JD)
-  // w.print()
   return JD;
 }   
 
@@ -332,9 +256,6 @@ function julianIntToDate(JD) {
    var D = Math.floor((h % s) / u) + 1;
    var M = ((Math.floor(h / s) + m) % n) + 1;
    var Y = Math.floor(e / p) - y + Math.floor((n + m - M) / n) ;
-  // w=window.open('text.txt')
-  // w.document.write(D)
-  // w.print()
    return new Date(Y,M-1,D);
 
 }
@@ -346,24 +267,17 @@ function getWMSdates() {
   var lastdayofweek = (totalDays - sliderstopvalue);
   var today = new Date();
 
-  // w=window.open('text.txt')
-  // w.document.write(sliderstopvalue)
-  // w.print()
-
   today.setMonth(today.getMonth()+1)
 
   today=dateToJulianNumber(today)
   ldw = (today-lastdayofweek);
   delta=today-(ldw-4)
 
-  //var start = new Date(julianIntToDate(ldw)); //cast as new date and takes ldw variable
+//The Julian date is from the last day of the week Saturday so 4 must be subtracted to get Tuesday
   var tdw1 = julianIntToDate(ldw-4)
 
   tdw=tdw1.getFullYear().toString()+pad((tdw1.getMonth()+1).toString(),2)+pad(tdw1.getDate().toString(),2)
 
-  //var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
-
-  //delta=date.toString().repl
 
   if (delta >= 7) {
     return [tdw,tdw];
@@ -379,127 +293,12 @@ function pad(num, size) {
     while (s.length < size) s = "0" + s;
     return s;
 }
-/////////////////////////////////////////////////////////////OLD
-// function getData(){
 
-//   //Finds first and last day of a specific week based on slider postion
-//   var sliderstopvalue = (slider.noUiSlider.get());
-//   var lastdayofweek = (totalDays - sliderstopvalue);
-
-//   var end = new Date(); //cast as new date
-//   ldw = end.setDate(end.getDate()-lastdayofweek);
-
-//   var start = new Date(ldw); //cast as new date and takes ldw variable
-//   fdw = start.setDate(start.getDate()-7);
-
-//   var  fdwtoISO= new Date(fdw).toISOString();
-//   var ldwtoISO = new Date(ldw).toISOString();
-
-//   //clear old cm data
-//   map.removeLayer(cmLayer);
-//   //add new cm data
-//   $.getJSON("https://cisa.cartodb.com/api/v2/sql/?format=GeoJSON&q=SELECT * FROM table_6245450067 WHERE reportdate >= '" + fdwtoISO + "' and reportdate <= '" + ldwtoISO + "'", function (data) {
-//   cmData.addData(data);
-//   map.addLayer(cmLayer);
-// });
-
-//   //Finds date for Drought Monitor WMS based on the slider postion
-//   var tuesday = new Date(fdw);
-//   tuesday = tuesday.setDate(tuesday.getDate()+3);
-//   var tues = new Date(tuesday).toISOString();
-
-//   var date_parts = String(tues.split("T")[0]).split("-");  
-//   dmDate = String(date_parts[0]).substr(2, 2)+String(date_parts[1])+String(date_parts[2]);
-//   // console.log(dmDate);
-
-// };
-
-// function callDrought(dmDate) {
-//   console.log("callDrought dmDate: "+dmDate);
-//     map.removeLayer(ndmc_wms);
-
-//     ndmc_wms = L.tileLayer.wms( "http://torka.unl.edu:8080/cgi-bin/mapserv.exe",{
-//       map: "/ms4w/apps/dm/service/usdm"+dmDate+"_wms.map",
-//       layers: "usdm"+dmDate,
-//       styles: "default",
-//       format: "image/png",
-//       crs: L.CRS.EPSG900913,
-//       opacity: .3
-//     });
-//     ndmc_wms.addTo(map);
-//     //layerControl.addOverlay(ndmc_wms);
-//   };
 
  slider.noUiSlider.on('slide', function(){
    changeLegend();
  });
 
- //slider.noUiSlider.on('set', function(){
- //  getData();
- //  callDrought(dmDate);
- //});
-
-//////////////////////NDMC WMS LAYER/////////////////////////////////
-// var ndmc_wms = L.tileLayer.wms( "http://torka.unl.edu:8080/cgi-bin/mapserv.exe", {
-//   map: "/ms4w/apps/dm/service/usdm160816_wms.map",
-//   layers: "usdm160816",
-//   styles: "default",
-//   format: "image/png",
-//   crs: L.CRS.EPSG900913,
-//   opacity: .3
-// })
-
-// var dmDate = "160913"; //Hard coded date that needs to be set changing release date
-
-// var ndmc_wms = L.tileLayer.wms( "http://torka.unl.edu:8080/cgi-bin/mapserv.exe",{
-//   map: "/ms4w/apps/dm/service/usdm"+dmDate+"_wms.map",
-//   layers: "usdm"+dmDate,
-//   styles: "default",
-//   format: "image/png",
-//   crs: L.CRS.EPSG900913,
-//   opacity: .3
-// });
-
-// var wmsDates=getWMSdates()
-// date=wmsDates[0]
-// dateString=wmsDates[1]
-// //var date="current"
-// //var dateString="_current"
-// var ndmc_wms = L.tileLayer.wms( "http://ndmc-001.unl.edu:8080/cgi-bin/mapserv.exe",{
-//   map: "/ms4w/apps/usdm/service/usdm_"+date+"_wms.map",
-//   layers: "usdm"+dateString,
-//   styles: "default",
-//   format: "image/png",
-//   crs: L.CRS.EPSG900913,
-//   opacity: .3
-// });
-
-// function callDrought(dmDate) {
-//   console.log("callDrought dmDate: "+dmDate);
-//     map.removeLayer(ndmc_wms);
-
-//     ndmc_wms = L.tileLayer.wms( "http://torka.unl.edu:8080/cgi-bin/mapserv.exe",{
-//       map: "/ms4w/apps/dm/service/usdm"+dmDate+"_wms.map",
-//       layers: "usdm"+dmDate,
-//       styles: "default",
-//       format: "image/png",
-//       crs: L.CRS.EPSG900913,
-//       opacity: .3
-//     });
-//     ndmc_wms.addTo(map);
-//     //layerControl.addOverlay(ndmc_wms);
-//   };
-
-// slider.noUiSlider.on('slide', function(){
-//   changeLegend();
-// });
-
-// slider.noUiSlider.on('set', function(){
-//   getData();
-//   callDrought(dmDate);
-// });
-
-// map.addLayer(ndmc_wms);
 
 ////////////////////
 ////////////////////
