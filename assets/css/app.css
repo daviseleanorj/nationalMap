@@ -16,7 +16,7 @@ input[type="radio"], input[type="checkbox"] {
   max-width: 100%;
   float: left;
 }
-  
+
 #map {
   width: auto;
   height: 100%;
@@ -50,7 +50,7 @@ input[type="radio"], input[type="checkbox"] {
   width: auto;
   bottom: 30px;
   right: 75px;
-  left: 325px;
+  left: 75px;
   z-index: 2;
   box-shadow: 0 0 5px rgba(0,0,0,0.25);
 }
@@ -135,7 +135,7 @@ input[type="radio"], input[type="checkbox"] {
   font-size: 25px;
   color: #449d44;
 }
-
+*/
 /*related to hidding navbar*/
 .navbar-collapse.in {
   overflow-y: hidden;

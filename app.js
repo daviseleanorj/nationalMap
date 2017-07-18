@@ -12,7 +12,7 @@ var map, dmDate, featureList, cmSearch = [];
 
 // Trick to "print" object to a file to check that devmap variables are working
 // w=window.open('text.txt')
-// w.document.write(sliderstopvalue)
+// w.document.write([variable to check])
 // w.print()
 
 ////////////////////
@@ -27,7 +27,7 @@ var map, dmDate, featureList, cmSearch = [];
 ////////////////////
 ////////////////////
 
-//URL paramaters in progress
+//URL paramaters
 //This makes a URL that can go to a speicfic date (www.cisa.sc.edu/map/?date=1335)
 //Dates are subtracted from "totalDays"
 
@@ -146,7 +146,6 @@ function changeLegend() {
   $('#daterange').html("Report Date:   " + startreport + " - " + endreport);
   
 };
-
 
 
 slider.noUiSlider.on('set', function(){
@@ -316,7 +315,6 @@ function syncSidebar() {
 
   /* Empty sidebar features */
   $("#feature-list tbody").empty();
-
   /* Loop through theaters layer and add only features which are in the map bounds */
   cmData.eachLayer(function (layer) {
     if (map.hasLayer(cmLayer)) {
@@ -355,27 +353,22 @@ function syncSidebar() {
 ////////////////////
 ////////////////////
 
-//////////////////////NDMC WMS LAYER/////////////////////////////////
-// var ndmc_wms = L.tileLayer.wms( "http://torka.unl.edu:8080/cgi-bin/mapserv.exe", {
-//   map: "/ms4w/apps/dm/service/usdm160816_wms.map",
-//   layers: "usdm160816",
-//   styles: "default",
-//   format: "image/png",
-//   crs: L.CRS.EPSG900913,
-//   opacity: .3
-// })
-
-// map.addLayer(ndmc_wms);
-
 
 //////////////////////BASEMAP LAYERS/////////////////////////////////
-var cartoLight = L.tileLayer("https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png", {
+
+// var cartoLight = L.tileLayer("https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png", {
+//   maxZoom: 14,
+//   minZoom: 3,
+//   attribution: '&copy; <a href="https://github.com/bmcbride/bootleaf">Bootleaf</a>, &copy; <a href="http://www.cocorahs.org/">CoCoRaHS</a> contributors, &copy; <a href="https://cartodb.com/attributions">CartoDB</a>'
+// });
+var arcBase = L.tileLayer("http://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}", {
   maxZoom: 14,
   minZoom: 3,
-  attribution: '&copy; <a href="https://github.com/bmcbride/bootleaf">Bootleaf</a>, &copy; <a href="http://www.cocorahs.org/">CoCoRaHS</a> contributors, &copy; <a href="https://cartodb.com/attributions">CartoDB</a>'
+  attribution: 'Esri, HERE, Garmin, Intermap, INCREMENT P, GEBCO, USGS, FAO, NPS, NRCAN, GeoBase, IGN, Kadaster NL, Ordnance Survey, Esri Japan, METI, Esri China (Hong Kong), swisstopo, MapmyIndia, © OpenStreetMap contributors, GIS User Community'
 });
 var usgsImagery = L.layerGroup([L.tileLayer("http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}", {
   maxZoom: 14,
+  minZoom: 3,
 }), L.tileLayer.wms("http://raster.nationalmap.gov/arcgis/services/Orthoimagery/USGS_EROS_Ortho_SCALE/ImageServer/WMSServer?", {
   minZoom: 10,
   maxZoom: 14,
@@ -407,7 +400,9 @@ var highlightStyle = {
 //  radius: 17
 };
 
-//layers.js was located here
+//layers.js was located here//
+
+
 /* Single marker cluster layer to hold all clusters */
 var markerClusters = new L.MarkerClusterGroup({
   spiderfyOnMaxZoom: true,
@@ -478,12 +473,6 @@ function reset_cmData() {
 };
 reset_cmData();
 
-// $.getJSON("https://cisa.cartodb.com/api/v2/sql/?format=GeoJSON&q=SELECT * FROM table_6245450067 WHERE reportdate >= (now() - interval '1 week')", function (data) {
-//   cmData.addData(data);
-//   map.addLayer(cmLayer);
-// });
-
-
 
 ////////////////////
 ////////////////////
@@ -498,26 +487,29 @@ reset_cmData();
 ////////////////////
 
 
-var lat = 39.8282;
-var lng = -98.5795;
-var zoom = 5;
+
+
+
 
 map = L.map("map", {
   zoom: 5,
+  minZoom: 3,
+  maxZoom: 14,
   center: [39.8282, -98.5795],
   //layers determines what gets added when map is intialized
-  layers: [cartoLight, markerClusters, highlight, ndmc_wms],
+  layers: [arcBase, markerClusters, highlight, ndmc_wms],
   zoomControl: false,
   attributionControl: false
 });
 
+////////////////////////////////////LAYER CONTROL/////////////////////////
 
+//Depending on the zoom the map initilizes at, the sidebar will be open or closed//
+if (map.getZoom() <= 5) {
+  $("#sidebar").hide();
+  map.invalidateSize();
+}
 
-// var zoomControl = L.control.zoom({
-//   position: "bottomright"
-// }).addTo(map);
-
-///////////////////////////////////////LAYER CONTROL/////////////////////////
 /* Layer control listeners that allow for a single markerClusters layer */
 map.on("overlayadd", function(e) {
   if (e.layer === cmLayer) {
@@ -544,6 +536,15 @@ map.on("click", function (e) {
   highlight.clearLayers();
 });
 
+//Opens the reports sidebar if zoom goes above 7//
+map.on("zoomend", function (e) {
+  if (map.getZoom() > 7) {
+    $("#sidebar").show(600);
+    document.getElementById("slider").style.left = "310px";
+    map.invalidateSize();
+  }
+});
+
 /* Attribution control */
 function updateAttribution(e) {
   $.each(map._layers, function(index, layer) {
@@ -568,6 +569,11 @@ map.addControl(attributionControl);
 /////////////////////////////Zoom Control that creates a home button//////////////////////////////////////
 //home button from http://fortawesome.github.io/Font-Awesome/icon/home///
 //https://gis.stackexchange.com/questions/127286/home-button-leaflet-map//
+
+//Map Center when clicking on home button in zoom control//
+var lat = 39.8282;
+var lng = -98.5795;
+var zoom = 5;
 
 map.setView([lat, lng], zoom);
 
@@ -606,7 +612,7 @@ L.Control.zoomHome = L.Control.extend({
     },
 
     _zoomIn: function (e) {
-        this._map.zoomIn(e.shiftKey ? 3 : 1);
+        this._map.zoomIn(e.shiftKey ? 3 : 1); 
     },
 
     _zoomOut: function (e) {
@@ -661,7 +667,7 @@ if (document.body.clientWidth <= 767) {
 }
 
 var baseLayers = {
-  "Street Map": cartoLight,
+  "Street Map": arcBase,
   "Aerial Imagery": usgsImagery
 };
 
@@ -671,12 +677,12 @@ var groupedOverlays = {
     //"<img src='assets/img/cm-point.png' width='18' height='18'>&nbsp;Weekly"
   },
   "Reference Layers": {
-    "US Counties": cnty,
+    //"US Counties": cnty,
     // "U.S. Drought Monitor": ndmc_wms,
     // "NOAA Climate Div.": climadiv,
     // "Weather Forecast Off.": wfo,
-    // "Ecological Regions": eco,
-    // "HUC-6 Water Basins": huc
+    //"Ecological Regions": ecoRegionsEPA,
+    //"USGS Water Basins": wbd
   }
 };
 
@@ -697,7 +703,6 @@ var ndmc_wms=groupedOverlays["Reference Layers"][USDM]
 
 
 var layerControl = L.control.groupedLayers(baseLayers, groupedOverlays, {collapsed: isCollapsed}).addTo(map);
-
 
 ////////////////////
 ////////////////////

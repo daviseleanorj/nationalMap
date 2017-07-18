@@ -73,7 +73,7 @@ function animateSidebar() {
   });
 }
 
-//Code I have written that is not currently working. 
+//Code I have written that is not currently working (David). 
 function alterSliderWidth() {
   // $("#slider").css("left: 300px");
 } 
