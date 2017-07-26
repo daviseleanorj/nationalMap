@@ -49,7 +49,7 @@ input[type="radio"], input[type="checkbox"] {
   position: absolute;
   width: auto;
   bottom: 30px;
-  right: 75px;
+  right: 90px;
   left: 75px;
   z-index: 2;
   box-shadow: 0 0 5px rgba(0,0,0,0.25);
@@ -58,7 +58,22 @@ input[type="radio"], input[type="checkbox"] {
     #slider {
       left: 50px; 
     }
-}       
+}
+#slider-left-btn {
+  position: absolute;
+  left: -35px;
+  bottom: -1.7px;
+  box-shadow: 0 0 5px rgba(0,0,0,0.25);
+}
+
+#slider-right-btn {
+  position: absolute;
+  right: -35px;
+  bottom: -1.7px;
+  box-shadow: 0 0 5px rgba(0,0,0,0.25);
+}
+
+
 #loading {
   position: absolute;
   width: 220px;
@@ -137,6 +152,10 @@ input[type="radio"], input[type="checkbox"] {
 }
 */
 /*related to hidding navbar*/
+
+#list.btn {
+  overflow-y: hidden;
+}
 .navbar-collapse.in {
   overflow-y: hidden;
 }

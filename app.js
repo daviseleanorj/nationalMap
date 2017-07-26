@@ -31,17 +31,28 @@ var map, dmDate, featureList, cmSearch = [];
 //This makes a URL that can go to a speicfic date (www.cisa.sc.edu/map/?date=1335)
 //Dates are subtracted from "totalDays"
 
-function getparamsURL(){
-  paramsURL = {};
-  window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m, key, value) {
-    paramsURL[key] = value;
-  });
-  return paramsURL;
+// function getparamsURL(){
+//   paramsURL = {};
+//   window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m, key, value) {
+//     paramsURL[key] = value;
+//   });
+//   return paramsURL;
+// }
+
+// var dateURL = getparamsURL()["date"];
+
+
+function getParamsURL(variable){
+  var query = window.location.search.substring(1);
+  var vars = query.split("&");
+  for (var i=0;i<vars.length;i++) {
+    var pair = vars[i].split("=");
+    if (pair[0] == variable) {return pair[1];}
+  }
+  return(false);
 }
 
-var dateURL = getparamsURL()["date"];
-
-
+var dateURL = getParamsURL("date"); //////date format must be MM-DD-YYYY///////////////
 
 //////////////////////SLIDER//////////////////////
 
@@ -50,18 +61,28 @@ var miliseconds_per_day = 1000*60*60*24;  //converts miliseconds to days
 
 var totalDays = (Math.ceil((new Date()- new Date(2016,09,15))/miliseconds_per_day)); //Gives total days in data reports
 
-//2013-09-01
+//Started October 9th 2016////
 
 
-//Determines whether or not there is a URL value available
-if (dateURL >= 1) {
-  withURL(dateURL);
-  var d = getSliderDates();
-  var lastdayofweek = (totalDays - sliderstopvalue);
+//Determines whether or not there is a URL value available then calculates the slider value and the most recent USDM////////
+//If there is no date value in the url, then it reverts to the most recent date and USDM/////
+//References: https://stackoverflow.com/questions/16719277/checking-if-a-variable-exists-in-javascript
+
+if (dateURL !== undefined && dateURL !== false) {
+  sliderDate = new Date(dateURL)
+  sliderDays= (Math.floor((new Date()- sliderDate)/miliseconds_per_day))
+  sliderNum= ((totalDays-sliderDays)+4)
+  withURL(sliderNum);
+  remainder = ((sliderNum-1)%7)
+  //var d = getSliderDates();
+  var lastdayofweek = (totalDays - sliderNum+remainder);
+
   var end = new Date(); //cast as new date
+
   ldw = end.setDate(end.getDate()-lastdayofweek);
 
   var start = new Date(ldw); //cast as new date and takes ldw variable
+
   tdw = start.setDate(start.getDate()-4); // returns the tuesday of week
 
   tdw = new Date(tdw);
@@ -73,10 +94,11 @@ if (dateURL >= 1) {
   USDM="Most Recent USDM"
 }
 
+////////////Slider date determined by URL/////////////////
 function withURL(){
   var slider = document.getElementById('slider');
   noUiSlider.create(slider, {
-    start: [dateURL],
+    start: [sliderNum],
     step: 7,
     range: {
       'min': [  1 ],
@@ -100,12 +122,12 @@ function withoutURL(){
 };
 
 
-  var d = getSliderDates();
-  var lastdayofweek = (totalDays - sliderstopvalue);
-  var end = new Date(); //cast as new date
+  d = getSliderDates();
+  lastdayofweek = (totalDays - sliderstopvalue);
+  end = new Date(); //cast as new date
   ldw = end.setDate(end.getDate()-lastdayofweek);
 
-  var start = new Date(ldw); //cast as new date and takes ldw variable
+  start = new Date(ldw); //cast as new date and takes ldw variable
   fdw = start.setDate(start.getDate()-7);
   tdw = start.setDate(start.getDate()-4); // returns the tuesday of week
 
@@ -119,12 +141,62 @@ function withoutURL(){
   tuesReport = String(tdw.getMonth()+1)+"/"+tdw.getDate()+"/"+String(tdw.getFullYear()).substring(2,4);
 
 $('#daterange').html("Report Date:   " + startreport + " - " + endreport);
-              
+
+///////////////////////Buttons for moving slider//////////////////
+//Reference for buttons(html,Java,CSS): http://jsfiddle.net/IonDen/ujcmje33////////
+//Reference for slider: https://refreshless.com/nouislider/events-callbacks///////
+
+$('#slider-left-btn').on('click', function(){
+  var oldSlider = (slider.noUiSlider.get());
+  var firstday = ((oldSlider-1)%7)
+  if (firstday>0) {
+    var newSlider=(oldSlider-firstday)
+    slider.noUiSlider.set(newSlider);
+    slider.noUiSlider.on('set', function(){
+      var d = getDateStrings();
+      changeLegend();
+      clearHighlight();
+      map.removeLayer(cmLayer);    
+      reset_cmData();
+    });
+  } else {
+    var newSlider=(oldSlider-7)
+  };
+  slider.noUiSlider.set(newSlider);
+  slider.noUiSlider.on('set', function(){
+    var d = getDateStrings();
+    changeLegend();
+    clearHighlight();
+    map.removeLayer(cmLayer);    
+    reset_cmData();
+  });
+});
+
+$('#slider-right-btn').on('click', function(){
+  var oldSlider = (slider.noUiSlider.get());
+  var remainder = ((oldSlider-1)%7)
+  oldSliderNum = parseInt(oldSlider)
+;  if (remainder==0) {
+    var newSlider=(oldSliderNum+7)
+    slider.noUiSlider.set(newSlider);
+    slider.noUiSlider.on('set', function(){
+      var d = getDateStrings();
+      changeLegend();
+      clearHighlight();
+      map.removeLayer(cmLayer);    
+      reset_cmData();
+    });
+  } else {
+    alert("This is the end of the timeline. Use the left arrow to go back in time")};
+});
+
+         
 
 //Changes slider date display based on slider postion
 function changeLegend() {
 
   var sliderstopvalue = (slider.noUiSlider.get());
+
   var lastdayofweek = (totalDays - sliderstopvalue);
 
   var end = new Date(); //cast as new date
@@ -214,7 +286,7 @@ function getSliderDates() {
 
 function getDate(){
     var d = getISOStrings();
-    $.getJSON("https://cocorahs.carto.com:443/api/v2/sql/?format=GeoJSON&q=SELECT * FROM public.yt7qpca3bk929mp27wpcnw WHERE reportdate >= '" + d.f + "' and reportdate <= '" + d.l + "'", function (data) {
+    $.getJSON("https://cocorahs.carto.com:443/api/v2/sql/?format=GeoJSON&q=SELECT * FROM public.table_1abk8awn0essfy5dnbf7lq WHERE reportdate >= '" + d.f + "' and reportdate <= '" + d.l + "'", function (data) {
         cmData.addData(data);
         map.addLayer(cmLayer);
     });
@@ -504,11 +576,8 @@ map = L.map("map", {
 
 ////////////////////////////////////LAYER CONTROL/////////////////////////
 
-//Depending on the zoom the map initilizes at, the sidebar will be open or closed//
-if (map.getZoom() <= 5) {
-  $("#sidebar").hide();
-  map.invalidateSize();
-}
+
+
 
 /* Layer control listeners that allow for a single markerClusters layer */
 map.on("overlayadd", function(e) {
@@ -536,12 +605,21 @@ map.on("click", function (e) {
   highlight.clearLayers();
 });
 
-//Opens the reports sidebar if zoom goes above 7//
+// if (map.getZoom() <= 5) {
+//   $("#sidebar").hide();
+//   map.invalidateSize();
+// }
+
+
+// Opens the reports sidebar if zoom goes above 7//
 map.on("zoomend", function (e) {
   if (map.getZoom() > 7) {
     $("#sidebar").show(600);
-    document.getElementById("slider").style.left = "310px";
+    $("#slider").animate({
+    left: "345px"
+  }, 600, function() {
     map.invalidateSize();
+  });
   }
 });
 

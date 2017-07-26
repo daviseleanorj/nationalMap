@@ -39,12 +39,54 @@ $("#legend-btn2").click(function() {
 
 /////////////
 
-//Reports button//
-$("#list-btn").click(function() {
-  animateSidebar();
-  alterSliderWidth();
-  return false;
+//////////////////////Reports button//////////////////////////
+//Depending on the zoom the map initilizes at, the sidebar will be open or closed//
+
+
+
+onload = $("#sidebar").hide();
+
+
+$("#list-btn").click(function(){
+  $("#sidebar").toggle(600,"linear",function(){
+    if ($('#sidebar').is(':hidden')){
+      bigSlider();
+    } if ($('#sidebar').is(':visible')){
+      smallSlider();
+    };
+  });
 });
+
+function smallSlider() {
+  $("#slider").animate({
+    left: "345px"
+  }, 600, function() {
+    map.invalidateSize();
+  });
+}
+
+function bigSlider() {
+  $("#slider").animate({
+    left: "75px"
+  }, 600, function() {
+    map.invalidateSize();
+  });
+}
+
+///////////////Chevron next to "Reports of interest"//////////////////
+$("#sidebar-hide-btn").click(function() {
+  $("#sidebar").toggle("slow","linear",function(){
+    if ($('#sidebar').is(':hidden')){
+      bigSlider();
+    } if ($('#sidebar').is(':visible')){
+      smallSlider();
+    };
+  });
+});
+
+
+
+/////////////////////////////////////////
 
 $("#nav-btn").click(function() {
   $(".navbar-collapse").collapse("toggle");
@@ -52,13 +94,6 @@ $("#nav-btn").click(function() {
 });
 
 $("#sidebar-toggle-btn").click(function() {
-  animateSidebar();
-  alterSliderWidth();
-  return false;
-});
-
-//Chevron next to "Reports of interest"
-$("#sidebar-hide-btn").click(function() {
   animateSidebar();
   alterSliderWidth();
   return false;
@@ -72,11 +107,6 @@ function animateSidebar() {
     map.invalidateSize();
   });
 }
-
-//Code I have written that is not currently working (David). 
-function alterSliderWidth() {
-  // $("#slider").css("left: 300px");
-} 
 
 function sizeLayerControl() {
   $(".leaflet-control-layers").css("max-height", $("#map").height() - 50);

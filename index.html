@@ -37,7 +37,7 @@
         <div class="navbar-header">
           <div class="navbar-icon-container">
             <a href="#" class="navbar-icon pull-right visible-xs" id="nav-btn"><i class="fa fa-bars fa-lg white"></i></a>
-            <a href="#" class="navbar-icon pull-right visible-xs" id="sidebar-toggle-btn"><i class="fa fa-search fa-lg white"></i></a>
+            <a href="#" class="navbar-icon pull-right visible-xs" id="sidebar-toggle-btn"><i class="fa fa-bar-chart fa-lg white"></i></a>
           </div>
           <a class="navbar-brand" href="#">Condition Monitoring</a>
         </div>
@@ -49,14 +49,16 @@
             </div>
           </form>
           <ul class="nav navbar-nav">
-            <li><a href="http://cisa.sc.edu/map/about.html" role="button"><i class="fa fa-leaf white"></i>&nbsp;&nbsp;Map Guide</a></li>
+            <li><a href="http://cisa.sc.edu/map/about.html" role="button"><i class="fa fa-map-signs white"></i>&nbsp;&nbsp;Map Guide</a></li>
             <li><a href="https://docs.google.com/forms/d/e/1FAIpQLScQtH-6_qDmZf3P4fdN4-U4mXdrm094bXxMMLtDBsr3eS70Fg/viewform" role="button"><i class="fa fa-book white"></i>&nbsp;&nbsp;Feedback</a></li>
-            <li class="hidden-xs"><a href="#" data-toggle="collapse" data-target=".navbar-collapse.in" id="list-btn"><i class="fa fa-list white"></i>&nbsp;&nbsp;Reports</a></li>
+
+            <li class="hidden-xs"><a href="#" role="button" data-toggle="collapse" data-target=".navbar-collapse.in" id="list-btn"><i class="fa fa-bar-chart white"></i>&nbsp;&nbsp;Reports</a></li>
+            
             <li class="dropdown">
-              <a id="LegendDrop" href="#" role="button" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-picture-o white"></i>&nbsp;&nbsp;Legend<b class="caret"></b></a>
+              <a id="LegendDrop" href="#" role="button" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-tags white"></i>&nbsp;&nbsp;Legend<b class="caret"></b></a>
               <ul class="dropdown-menu">
-                <li><a href="#" data-toggle="collapse" data-target=".navbar-collapse.in" id="legend-btn"><i class="fa fa-picture-o"></i>&nbsp;&nbsp;Report Icons</a></li>
-                <li><a href="#" data-toggle="collapse" data-target=".navbar-collapse.in" id="legend-btn2"><i class="fa fa-picture-o"></i>&nbsp;&nbsp;US Drought Monitor</a></li>
+                <li><a href="#" data-toggle="collapse" data-target=".navbar-collapse.in" id="legend-btn"><i class="fa fa-tags"></i>&nbsp;&nbsp;Report Icons</a></li>
+                <li><a href="#" data-toggle="collapse" data-target=".navbar-collapse.in" id="legend-btn2"><i class="fa fa-tags"></i>&nbsp;&nbsp;US Drought Monitor</a></li>
               </ul>
             </li>
             <li class="dropdown">
@@ -83,7 +85,7 @@
       </div>
     </div>
     <div id="container">
-      <div id="sidebar">
+      <div  id="sidebar">
         <div class="sidebar-wrapper">
           <div class="panel panel-default" id="features">
             <div class="panel-heading">
@@ -121,7 +123,12 @@
       </div>
       <div id="map"></div>
       <div id="daterange"></div>
-      <div id="slider"></div>
+      <div id="slider">
+        <div class="extra-controls">
+          <button type="button" class="btn btn-xs btn-default" onclick="this.blur();" id="slider-left-btn"><i class="fa fa-chevron-left"></i></button>
+          <button type="button" class="btn btn-xs btn-default" onclick="this.blur();" id="slider-right-btn"><i class="fa fa-chevron-right"></i></button>
+        </div>
+      </div>
     </div>
 
     <div id="loading">
