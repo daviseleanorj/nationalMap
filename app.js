@@ -59,8 +59,7 @@ var dateURL = getParamsURL("date"); //////date format must be MM-DD-YYYY////////
 var miliseconds_per_day = 1000*60*60*24;  //converts miliseconds to days
 // var miliseconds_per_week = 1000*7*24*60*60;
 
-var totalDays = (Math.ceil((new Date()- new Date(2016,09,15))/miliseconds_per_day)); //Gives total days in data reports
-
+var totalDays = (Math.ceil((new Date()- new Date(2016,09,16))/miliseconds_per_day)); //Gives total days in data reports
 //Started October 9th 2016////
 
 
@@ -71,9 +70,10 @@ var totalDays = (Math.ceil((new Date()- new Date(2016,09,15))/miliseconds_per_da
 if (dateURL !== undefined && dateURL !== false) {
   sliderDate = new Date(dateURL)
   sliderDays= (Math.floor((new Date()- sliderDate)/miliseconds_per_day))
-  sliderNum= ((totalDays-sliderDays)+4)
+  sliderNum= ((totalDays-sliderDays)+5)
   withURL(sliderNum);
   remainder = ((sliderNum-1)%7)
+
   //var d = getSliderDates();
   var lastdayofweek = (totalDays - sliderNum+remainder);
 
@@ -83,7 +83,7 @@ if (dateURL !== undefined && dateURL !== false) {
 
   var start = new Date(ldw); //cast as new date and takes ldw variable
 
-  tdw = start.setDate(start.getDate()-4); // returns the tuesday of week
+  tdw = start.setDate(start.getDate()-5); // returns the tuesday of week
 
   tdw = new Date(tdw);
 
@@ -124,18 +124,18 @@ function withoutURL(){
 
   d = getSliderDates();
   lastdayofweek = (totalDays - sliderstopvalue);
+
   end = new Date(); //cast as new date
   ldw = end.setDate(end.getDate()-lastdayofweek);
 
   start = new Date(ldw); //cast as new date and takes ldw variable
-  fdw = start.setDate(start.getDate()-7);
-  tdw = start.setDate(start.getDate()-4); // returns the tuesday of week
+  fdw = start.setDate(start.getDate()-6);
+  tdw = start.setDate(start.getDate()+1); // returns the tuesday of week
 
   fdw = new Date(fdw);    //Have to cast as new date because of javascript
   ldw = new Date(ldw);
   tdw = new Date(tdw);
-
-  newstart = new Date(fdw.setDate(fdw.getDate()+1));
+  newstart = new Date(fdw.setDate(fdw.getDate()));
   startreport = String(newstart.getMonth()+1)+"/"+newstart.getDate()+"/"+String(newstart.getFullYear()).substring(2,4);
   endreport = String(ldw.getMonth()+1)+"/"+ldw.getDate()+"/"+String(ldw.getFullYear()).substring(2,4);
   tuesReport = String(tdw.getMonth()+1)+"/"+tdw.getDate()+"/"+String(tdw.getFullYear()).substring(2,4);
@@ -203,14 +203,15 @@ function changeLegend() {
   ldw = end.setDate(end.getDate()-lastdayofweek);
 
   var start = new Date(ldw); //cast as new date and takes ldw variable
-  fdw = start.setDate(start.getDate()-7);
-  tdw = start.setDate(start.getDate()-4); // returns the tuesday of week
+  fdw = start.setDate(start.getDate()-6);
+  tdw = start.setDate(start.getDate()+1); // returns the tuesday of week
 
   fdw = new Date(fdw);    //Have to cast as new date because of javascript
   ldw = new Date(ldw);
   tdw = new Date(tdw);
 
-  var newstart = new Date(fdw.setDate(fdw.getDate()+1));
+
+  var newstart = new Date(fdw.setDate(fdw.getDate()));
   var startreport = String(newstart.getMonth()+1)+"/"+newstart.getDate()+"/"+String(newstart.getFullYear()).substring(2,4);
   var endreport = String(ldw.getMonth()+1)+"/"+ldw.getDate()+"/"+String(ldw.getFullYear()).substring(2,4);
   var tReport = String(tdw.getFullYear()+tdw.getMonth()+tdw.getDate());
@@ -224,6 +225,7 @@ slider.noUiSlider.on('set', function(){
   getDate();
   var wmsDates=getWMSdates();
   date=wmsDates[0];
+  alert(date)
   dateString=wmsDates[1];
   map.removeLayer(groupedOverlays["Reference Layers"][USDM])
   groupedOverlays["Reference Layers"][USDM]=L.tileLayer.wms( "http://ndmc-001.unl.edu:8080/cgi-bin/mapserv.exe",{
@@ -266,7 +268,7 @@ function getDateStrings(){
     d = getSliderDates();
     fdwtoDate = new Date(d.f).toDateString();
     ldwtoDate = new Date(d.l).toDateString();
-    
+
     return { f:fdwtoDate, l:ldwtoDate };
 }
 
@@ -345,7 +347,7 @@ function getWMSdates() {
   delta=today-(ldw-4)
 
 //The Julian date is from the last day of the week Saturday so 4 must be subtracted to get Tuesday
-  var tdw1 = julianIntToDate(ldw-4)
+  var tdw1 = julianIntToDate(ldw-5)
 
   tdw=tdw1.getFullYear().toString()+pad((tdw1.getMonth()+1).toString(),2)+pad(tdw1.getDate().toString(),2)
 
