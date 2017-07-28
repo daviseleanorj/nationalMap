@@ -28,18 +28,9 @@ var map, dmDate, featureList, cmSearch = [];
 ////////////////////
 
 //URL paramaters
-//This makes a URL that can go to a speicfic date (www.cisa.sc.edu/map/?date=1335)
+//This makes a URL that can go to a specific date (www.cisa.sc.edu/map/?date=10-25-2016)
 //Dates are subtracted from "totalDays"
 
-// function getparamsURL(){
-//   paramsURL = {};
-//   window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m, key, value) {
-//     paramsURL[key] = value;
-//   });
-//   return paramsURL;
-// }
-
-// var dateURL = getparamsURL()["date"];
 
 
 function getParamsURL(variable){
@@ -53,6 +44,12 @@ function getParamsURL(variable){
 }
 
 var dateURL = getParamsURL("date"); //////date format must be MM-DD-YYYY///////////////
+var latURL = getParamsURL("lat");
+var lonURL = getParamsURL("lon");
+var zoomURL = getParamsURL("zoom");
+
+
+
 
 //////////////////////SLIDER//////////////////////
 
@@ -92,7 +89,24 @@ if (dateURL !== undefined && dateURL !== false) {
 } else {
   withoutURL();
   USDM="Most Recent USDM"
-}
+};
+
+//////////////Lat and Longitude based on URL////////////////
+if ((latURL && lonURL) !== undefined && (latURL && lonURL) !== false) {
+  var lat = latURL;
+  var lon = lonURL;
+} else {
+  var lat = 39.8282;
+  var lon = -98.5795;
+};
+
+////////////////////Zoom from URL//////////////////////////
+if (zoomURL !== undefined && zoomURL !== false) {
+  var zoom = zoomURL;
+} else {
+  var zoom = 5;
+};
+
 
 ////////////Slider date determined by URL/////////////////
 function withURL(){
@@ -566,10 +580,10 @@ reset_cmData();
 
 
 map = L.map("map", {
-  zoom: 5,
+  zoom: [zoom],
   minZoom: 3,
   maxZoom: 14,
-  center: [39.8282, -98.5795],
+  center: [lat, lon],
   //layers determines what gets added when map is intialized
   layers: [arcBase, markerClusters, highlight, ndmc_wms],
   zoomControl: false,
@@ -607,22 +621,43 @@ map.on("click", function (e) {
   highlight.clearLayers();
 });
 
-// if (map.getZoom() <= 5) {
-//   $("#sidebar").hide();
-//   map.invalidateSize();
-// }
+///////////Changing slider size functions/////////////
+function smallSlider() {
+  $("#slider").animate({
+    left: "345px"
+  }, 600, function() {
+    map.invalidateSize();
+  });
+}
+
+function bigSlider() {
+  $("#slider").animate({
+    left: "75px"
+  }, 600, function() {
+    map.invalidateSize();
+  });
+};
+
+
+////////////////Changes the interface based on zoom level////////////////////////
+
+onload = loadZoom();
+function loadZoom() {
+  if (map.getZoom() > 7) {
+    $("#sidebar").show(600);
+    smallSlider();
+  } else{
+    $("#sidebar").hide();
+  }
+};
 
 
 // Opens the reports sidebar if zoom goes above 7//
 map.on("zoomend", function (e) {
   if (map.getZoom() > 7) {
     $("#sidebar").show(600);
-    $("#slider").animate({
-    left: "345px"
-  }, 600, function() {
-    map.invalidateSize();
-  });
-  }
+    smallSlider();
+  };
 });
 
 /* Attribution control */
@@ -651,11 +686,10 @@ map.addControl(attributionControl);
 //https://gis.stackexchange.com/questions/127286/home-button-leaflet-map//
 
 //Map Center when clicking on home button in zoom control//
-var lat = 39.8282;
-var lng = -98.5795;
-var zoom = 5;
+var latBtn = 39.8282;
+var lngBtn = -98.5795;
+var zoomBtn = 5;
 
-map.setView([lat, lng], zoom);
 
 // custom zoom bar control that includes a Zoom Home function
 L.Control.zoomHome = L.Control.extend({
@@ -700,7 +734,7 @@ L.Control.zoomHome = L.Control.extend({
     },
 
     _zoomHome: function (e) {
-        map.setView([lat, lng], zoom);
+        map.setView([latBtn, lngBtn], zoom);
     },
 
     _createButton: function (html, title, className, container, fn) {
