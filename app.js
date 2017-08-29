@@ -10,10 +10,7 @@ var map, dmDate, featureList, cmSearch = [];
 //   }
 // }
 
-// Trick to "print" object to a file to check that devmap variables are working
-// w=window.open('text.txt')
-// w.document.write([variable to check])
-// w.print()
+// Use alert([variable]) to check values
 
 ////////////////////
 ////////////////////
@@ -164,16 +161,15 @@ $('#daterange').html("Report Date:   " + startreport + " - " + endreport);
 $('#slider-left-btn').on('click', function(){
   var oldSliderL = (slider.noUiSlider.get());
   var firstdayL = ((oldSliderL-1)%7)
+
   if (firstdayL>0) {
     var newSliderL=(oldSliderL-firstdayL)
     slider.noUiSlider.set(newSliderL);
-    slider.noUiSlider.on('set', function(){
       var d = getDateStrings();
       changeLegend();
       clearHighlight();
       map.removeLayer(cmLayer);    
       reset_cmData();
-    });
   } else {
     var newSliderL=(oldSliderL-7)
     slider.noUiSlider.set(newSliderL);
@@ -936,3 +932,5 @@ if (!L.Browser.touch) {
 } else {
   L.DomEvent.disableClickPropagation(container);
 }
+
+map.invalidateSize();
