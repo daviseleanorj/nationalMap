@@ -40,12 +40,7 @@ $("#legend-btn2").click(function() {
 /////////////
 
 //////////////////////Reports button//////////////////////////
-//Depending on the zoom the map initilizes at, the sidebar will be open or closed//
-
-
-
-onload = $("#sidebar").hide();
-
+//Opens and closes sidebar and sizes slider accordingly///////
 
 $("#list-btn").click(function(){
   $("#sidebar").toggle(600,"linear",function(){
@@ -57,21 +52,6 @@ $("#list-btn").click(function(){
   });
 });
 
-function smallSlider() {
-  $("#slider").animate({
-    left: "345px"
-  }, 600, function() {
-    map.invalidateSize();
-  });
-}
-
-function bigSlider() {
-  $("#slider").animate({
-    left: "75px"
-  }, 600, function() {
-    map.invalidateSize();
-  });
-}
 
 ///////////////Chevron next to "Reports of interest"//////////////////
 $("#sidebar-hide-btn").click(function() {
@@ -83,7 +63,6 @@ $("#sidebar-hide-btn").click(function() {
     };
   });
 });
-
 
 
 /////////////////////////////////////////

@@ -56,7 +56,7 @@ var zoomURL = getParamsURL("zoom");
 var miliseconds_per_day = 1000*60*60*24;  //converts miliseconds to days
 // var miliseconds_per_week = 1000*7*24*60*60;
 
-var totalDays = (Math.ceil((new Date()- new Date(2016,09,16))/miliseconds_per_day)); //Gives total days in data reports
+var totalDays = (Math.ceil((new Date()- new Date(2016,09,17))/miliseconds_per_day)); //Gives total days in data reports
 //Started October 9th 2016////
 
 
@@ -144,11 +144,12 @@ function withoutURL(){
 
   start = new Date(ldw); //cast as new date and takes ldw variable
   fdw = start.setDate(start.getDate()-6);
-  tdw = start.setDate(start.getDate()+1); // returns the tuesday of week
+  tdw = fdw; // returns the tuesday of week
 
   fdw = new Date(fdw);    //Have to cast as new date because of javascript
   ldw = new Date(ldw);
   tdw = new Date(tdw);
+
   newstart = new Date(fdw.setDate(fdw.getDate()));
   startreport = String(newstart.getMonth()+1)+"/"+newstart.getDate()+"/"+String(newstart.getFullYear()).substring(2,4);
   endreport = String(ldw.getMonth()+1)+"/"+ldw.getDate()+"/"+String(ldw.getFullYear()).substring(2,4);
@@ -161,11 +162,11 @@ $('#daterange').html("Report Date:   " + startreport + " - " + endreport);
 //Reference for slider: https://refreshless.com/nouislider/events-callbacks///////
 
 $('#slider-left-btn').on('click', function(){
-  var oldSlider = (slider.noUiSlider.get());
-  var firstday = ((oldSlider-1)%7)
-  if (firstday>0) {
-    var newSlider=(oldSlider-firstday)
-    slider.noUiSlider.set(newSlider);
+  var oldSliderL = (slider.noUiSlider.get());
+  var firstdayL = ((oldSliderL-1)%7)
+  if (firstdayL>0) {
+    var newSliderL=(oldSliderL-firstdayL)
+    slider.noUiSlider.set(newSliderL);
     slider.noUiSlider.on('set', function(){
       var d = getDateStrings();
       changeLegend();
@@ -174,34 +175,30 @@ $('#slider-left-btn').on('click', function(){
       reset_cmData();
     });
   } else {
-    var newSlider=(oldSlider-7)
-  };
-  slider.noUiSlider.set(newSlider);
-  slider.noUiSlider.on('set', function(){
-    var d = getDateStrings();
-    changeLegend();
-    clearHighlight();
-    map.removeLayer(cmLayer);    
-    reset_cmData();
-  });
+    var newSliderL=(oldSliderL-7)
+    slider.noUiSlider.set(newSliderL);
+      var d = getDateStrings();
+      changeLegend();
+      clearHighlight();
+      map.removeLayer(cmLayer);    
+      reset_cmData();
+  }
 });
 
 $('#slider-right-btn').on('click', function(){
   var oldSlider = (slider.noUiSlider.get());
   var remainder = ((oldSlider-1)%7)
   oldSliderNum = parseInt(oldSlider)
-;  if (remainder==0) {
+;  if (totalDays!=oldSlider) {
     var newSlider=(oldSliderNum+7)
     slider.noUiSlider.set(newSlider);
-    slider.noUiSlider.on('set', function(){
       var d = getDateStrings();
       changeLegend();
       clearHighlight();
       map.removeLayer(cmLayer);    
       reset_cmData();
-    });
   } else {
-    alert("This is the end of the timeline. Use the left arrow to go back in time")};
+    alert("This is the most recent data from the timeline. Use the left arrow to look at historical data.")};
 });
 
          
@@ -210,7 +207,6 @@ $('#slider-right-btn').on('click', function(){
 function changeLegend() {
 
   var sliderstopvalue = (slider.noUiSlider.get());
-
   var lastdayofweek = (totalDays - sliderstopvalue);
 
   var end = new Date(); //cast as new date
@@ -218,12 +214,11 @@ function changeLegend() {
 
   var start = new Date(ldw); //cast as new date and takes ldw variable
   fdw = start.setDate(start.getDate()-6);
-  tdw = start.setDate(start.getDate()+1); // returns the tuesday of week
+  tdw = fdw; // returns the tuesday of week
 
   fdw = new Date(fdw);    //Have to cast as new date because of javascript
   ldw = new Date(ldw);
   tdw = new Date(tdw);
-
 
   var newstart = new Date(fdw.setDate(fdw.getDate()));
   var startreport = String(newstart.getMonth()+1)+"/"+newstart.getDate()+"/"+String(newstart.getFullYear()).substring(2,4);
@@ -239,7 +234,6 @@ slider.noUiSlider.on('set', function(){
   getDate();
   var wmsDates=getWMSdates();
   date=wmsDates[0];
-  alert(date)
   dateString=wmsDates[1];
   map.removeLayer(groupedOverlays["Reference Layers"][USDM])
   groupedOverlays["Reference Layers"][USDM]=L.tileLayer.wms( "http://ndmc-001.unl.edu:8080/cgi-bin/mapserv.exe",{
@@ -361,7 +355,7 @@ function getWMSdates() {
   delta=today-(ldw-4)
 
 //The Julian date is from the last day of the week Saturday so 4 must be subtracted to get Tuesday
-  var tdw1 = julianIntToDate(ldw-5)
+  var tdw1 = julianIntToDate(ldw-6)
 
   tdw=tdw1.getFullYear().toString()+pad((tdw1.getMonth()+1).toString(),2)+pad(tdw1.getDate().toString(),2)
 
@@ -482,10 +476,10 @@ var usgsImagery = L.layerGroup([L.tileLayer("http://server.arcgisonline.com/ArcG
 var highlight = L.geoJson(null);
 var highlightStyle = {
   stroke: false,
-  fill: false
-//  fillColor: "#00FFFF",
-//  fillOpacity: 0.35,
-//  radius: 17
+  fill: true,
+  fillColor: "#8F14ED",
+  fillOpacity: 0.35,
+  radius: 17
 };
 
 //layers.js was located here//
@@ -496,7 +490,7 @@ var markerClusters = new L.MarkerClusterGroup({
   spiderfyOnMaxZoom: true,
   showCoverageOnHover: false,
   zoomToBoundsOnClick: true,
-  disableClusteringAtZoom: 8
+  disableClusteringAtZoom: 1
 });
 
 
