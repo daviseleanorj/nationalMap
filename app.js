@@ -351,7 +351,7 @@ function getWMSdates() {
   delta=today-(ldw-4)
 
 //The Julian date is from the last day of the week Saturday so 4 must be subtracted to get Tuesday
-  var tdw1 = julianIntToDate(ldw-6)
+  var tdw1 = julianIntToDate(ldw-7)
 
   tdw=tdw1.getFullYear().toString()+pad((tdw1.getMonth()+1).toString(),2)+pad(tdw1.getDate().toString(),2)
 
@@ -511,6 +511,9 @@ function set_PointIcon(feature) {
   }
 };
 
+cocorahsLink = 'https://www.cocorahs.org/viewdata/conditionmonitoring/?stationfield=stationnumber&stationvalue='
+
+
 function reset_cmData() {
     cmData = L.geoJson(null, {
     pointToLayer: function (feature, latlng) {
@@ -527,7 +530,7 @@ function reset_cmData() {
   },
   onEachFeature: function (feature, layer) {
     if (feature.properties) {
-      var content = "<table class='table table-striped table-bordered table-condensed'>" + "<tr><th>Station Number</th><td>" + feature.properties.stationnumber + "</td></tr>" + "<tr><th>Report</th><td>" + feature.properties.description + "</td></tr>" + "<tr><th>Condition</th><td>" + feature.properties.scalebar + "</td></tr>" + "<tr><th>Date</th><td>" + feature.properties.reportdate + "</td></tr>" + "<table>";
+      var content = "<table class='table table-striped table-bordered table-condensed'>" + "<tr><th>Station Number</th><td>" + feature.properties.stationnumber + "</td></tr>" + "<tr><th>Report</th><td>" + feature.properties.description + "</td></tr>" + "<tr><th>Condition</th><td>" + feature.properties.scalebar + "</td></tr>" + "<tr><th>Date</th><td>" + feature.properties.reportdate + "</td></tr>" + "<tr><th>Summary Data</th><td>" + "<a href= https://www.cocorahs.org/viewdata/conditionmonitoring/?stationfield=stationnumber&stationvalue="+feature.properties.stationnumber+">CoCoRaHS summary data by week for this station.</a>" + "</td></tr>" + "<table>";
       layer.on({
         click: function (e) {
           $("#feature-title").html(feature.properties.stationname);
@@ -550,6 +553,7 @@ function reset_cmData() {
 });
 };
 reset_cmData();
+
 
 
 ////////////////////
