@@ -347,12 +347,13 @@ function getWMSdates() {
   today.setMonth(today.getMonth()+1)
 
   today=dateToJulianNumber(today)
+
   ldw = (today-lastdayofweek);
   delta=today-(ldw-4)
 
 //The Julian date is from the last day of the week Saturday so 4 must be subtracted to get Tuesday
-  var tdw1 = julianIntToDate(ldw-7)
-
+  var tdw1 = julianIntToDate(ldw-6)
+ 
   tdw=tdw1.getFullYear().toString()+pad((tdw1.getMonth()+1).toString(),2)+pad(tdw1.getDate().toString(),2)
 
 

@@ -39,6 +39,16 @@ $("#legend-btn2").click(function() {
 
 /////////////
 
+/////Logo Controls//////
+
+$("#logo-btn").click(function() {
+  $("#logoModal").modal("show");
+  $(".navbar-collapse.in").collapse("hide");
+  return false;
+});
+
+/////////////
+
 //////////////////////Reports button//////////////////////////
 //Opens and closes sidebar and sizes slider accordingly///////
 
@@ -73,9 +83,13 @@ $("#nav-btn").click(function() {
 });
 
 $("#sidebar-toggle-btn").click(function() {
-  animateSidebar();
-  alterSliderWidth();
-  return false;
+  $("#sidebar").toggle(600,"linear",function(){
+    if ($('#sidebar').is(':hidden')){
+      bigSlider();
+    } if ($('#sidebar').is(':visible')){
+      smallSlider();
+    };
+  });
 });
 
 /////////////////Function to change sidebar////////////////////

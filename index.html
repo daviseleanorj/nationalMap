@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
+    <meta name="viewport" content="initial-scale=1,width=device-width">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#000000">
@@ -50,7 +50,7 @@
             </div>
           </form>
           <ul class="nav navbar-nav">
-            <li><a href="http://cisa.sc.edu/natmap/about.html" role="button"><i class="fa fa-map-signs white"></i>&nbsp;&nbsp;Map Guide</a></li>
+            <li><a href="https://www.cocorahs.org/maps/conditionmonitoring/about.html" role="button"><i class="fa fa-map-signs white"></i>&nbsp;&nbsp;Map Guide</a></li>
             <li><a href="https://docs.google.com/forms/d/e/1FAIpQLScQtH-6_qDmZf3P4fdN4-U4mXdrm094bXxMMLtDBsr3eS70Fg/viewform" role="button"><i class="fa fa-book white"></i>&nbsp;&nbsp;Feedback</a></li>
 
             <li class="hidden-xs"><a href="#" role="button" data-toggle="collapse" data-target=".navbar-collapse.in" id="list-btn"><i class="fa fa-bar-chart white"></i>&nbsp;&nbsp;Reports</a></li>
@@ -75,13 +75,14 @@
                 </ul>
             </li>
             <li><a href="https://www.cocorahs.org/Admin/MyDataEntry/ConditionMonitoringReport.aspx" role="button"><i class="fa fa-check-square-o white"></i>&nbsp;&nbsp;Submit Report</a></li>
-          <ul class = "nav navbar-nav">
-              <th><img src="assets/img/Logos/cocorahs.svg" style="width:45.9px;height:45px;"></img></th>
+            <li class = "dropdown" id="logos">
+              <th><img src="assets/img/Logos/cocorahs.svg" style="width:35.9px;height:35px;"></img></th>
               <th><img src="assets/img/Logos/CISA.svg" style="width:93px;height:35px;"></img></th>
-              <th><img src="assets/img/Logos/RISA.svg" style="width:90px;height:45px;"></img></th>
-              <th><img src="assets/img/Logos/NIDIS.svg" style="width:45.9px;height:45px;"></img></th>
-              <th><img src="assets/img/Logos/NDMC.svg" style="width:45px;height:45px;"></img></th>
-          </ul>
+              <th><img src="assets/img/Logos/RISA.svg" style="width:70px;height:35px;"></img></th>
+              <th><img src="assets/img/Logos/NIDIS.svg" style="width:35.9px;height:35px;"></img></th>
+              <th><img src="assets/img/Logos/NDMC.svg" style="width:35px;height:35px;"></img></th>
+            </li>
+            <li><a href="#" data-toggle="collapse" data-target=".navbar-collapse.in" id="logo-btn"><i class="fa fa-tags white"></i>&nbsp;&nbsp;Collaborators</a></li>
         </div><!--/.navbar-collapse -->
       </div>
     </div>
@@ -174,7 +175,7 @@
                 <th><b>Symbols</b></th>
               </tr>
               <tr>
-                <th><img src="assets/img/cm-legend.png"></img></th>
+                <th><img src="assets/img/cm-legend1.png"></img></th>
               </tr>
             </table>
           </div>
@@ -208,6 +209,29 @@
         </div><!-- /.modal-content -->
       </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
+
+    <div class="modal fade" id="logoModal" tabindex="-1" role="dialog">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title">Collaborators</h4>
+          </div>
+          <div class="modal-body">
+            <table class='table table-striped table-bordered table-condensed'>
+              <tr>
+                <center><img src="assets/img/Logos/allLogos3.png"></img></center>
+              </tr>
+            </table>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+
 
     <div class="modal fade" id="featureModal" tabindex="-1" role="dialog">
       <div class="modal-dialog">
