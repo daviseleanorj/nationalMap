@@ -62,47 +62,109 @@ var totalDays = (Math.ceil((new Date()- new Date(2016,09,17))/miliseconds_per_da
 //If there is no date value in the url, then it reverts to the most recent date and USDM/////
 //References: https://stackoverflow.com/questions/16719277/checking-if-a-variable-exists-in-javascript
 
-if (dateURL !== undefined && dateURL !== false) {
-  sliderDate = new Date(dateURL)
-  sliderDays= (Math.floor((new Date()- sliderDate)/miliseconds_per_day))
-  sliderNum= ((totalDays-sliderDays)+5)
-  withURL(sliderNum);
-  remainder = ((sliderNum-1)%7)
+// if (dateURL !== undefined && dateURL !== false) {
+//   sliderDate = new Date(dateURL)
+//   sliderDays= (Math.floor((new Date()- sliderDate)/miliseconds_per_day))
+//   sliderNum= ((totalDays-sliderDays)+5)
+//   withURL(sliderNum);
+//   remainder = ((sliderNum-1)%7)
 
-  //var d = getSliderDates();
-  var lastdayofweek = (totalDays - sliderNum+remainder);
+//   //var d = getSliderDates();
+//   var lastdayofweek = (totalDays - sliderNum+remainder);
 
-  var end = new Date(); //cast as new date
+//   var end = new Date(); //cast as new date
 
-  ldw = end.setDate(end.getDate()-lastdayofweek);
+//   ldw = end.setDate(end.getDate()-lastdayofweek);
 
-  var start = new Date(ldw); //cast as new date and takes ldw variable
+//   var start = new Date(ldw); //cast as new date and takes ldw variable
 
-  tdw = start.setDate(start.getDate()-5); // returns the tuesday of week
+//   tdw = start.setDate(start.getDate()-5); // returns the tuesday of week
 
-  tdw = new Date(tdw);
+//   tdw = new Date(tdw);
 
-  date1 = String(tdw.getMonth()+1)+"/"+tdw.getDate()+"/"+String(tdw.getFullYear()).substring(2,4);
-  USDM="USDM for "+date1
+//   date1 = String(tdw.getMonth()+1)+"/"+tdw.getDate()+"/"+String(tdw.getFullYear()).substring(2,4);
+//   USDM="USDM for "+date1
+// } else {
+//   withoutURL();
+//   USDM="Most Recent USDM"
+// };
+
+// //////////////Lat and Longitude based on URL////////////////
+// if ((latURL && lonURL) !== undefined && (latURL && lonURL) !== false) {
+//   var lat = latURL;
+//   var lon = lonURL;
+// } else {
+//   var lat = 39.8282;
+//   var lon = -98.5795;
+// };
+
+// ////////////////////Zoom from URL//////////////////////////
+// if (zoomURL !== undefined && zoomURL !== false) {
+//   var zoom = zoomURL;
+// } else {
+//   var zoom = 5;
+// };
+
+if ((dateURL !== undefined && dateURL !== false) || (stateURL !== undefined && stateURL !== false) || ((latURL && lonURL) !== undefined && (latURL && lonURL) !== false) || (zoomURL !== undefined && zoomURL !== false)) {
+  if (dateURL !== undefined && dateURL !== false) {
+    sliderDate = new Date(dateURL)
+    sliderDays= (Math.floor((new Date()- sliderDate)/miliseconds_per_day))
+    sliderNum= ((totalDays-sliderDays)+5)
+    withURL(sliderNum);
+    remainder = ((sliderNum-1)%7)
+
+    //var d = getSliderDates();
+    var lastdayofweek = (totalDays - sliderNum+remainder);
+
+    var end = new Date(); //cast as new date
+
+    ldw = end.setDate(end.getDate()-lastdayofweek);
+
+    var start = new Date(ldw); //cast as new date and takes ldw variable
+
+    tdw = start.setDate(start.getDate()-5); // returns the tuesday of week
+
+    tdw = new Date(tdw);
+
+    date1 = String(tdw.getMonth()+1)+"/"+tdw.getDate()+"/"+String(tdw.getFullYear()).substring(2,4);
+    USDM="USDM for "+date1
+  } else {
+    withoutURL();
+    USDM="Most Recent USDM"
+  };
+  if ((stateURL !== undefined && stateURL !== false) || ((latURL && lonURL) !== undefined && (latURL && lonURL) !== false) || (zoomURL !== undefined && zoomURL !== false)) {
+    ///////////////////State URL//////////////////////////////
+    if (stateURL !== undefined && stateURL !== false) {
+      if (stateURL = "AL") {
+        var zoom = 7;
+        var lat = 32.7794;
+        var lon = -86.8287;
+      } else {
+        alert("no state");
+      };
+    };
+
+    // ////////////Lat and Longitude based on URL////////////////
+    // if ((latURL && lonURL) !== undefined && (latURL && lonURL) !== false) {
+    //   var lat = latURL;
+    //   var lon = lonURL;
+    // };
+
+    ////////////////////Zoom from URL//////////////////////////
+    if (zoomURL !== undefined && zoomURL !== false) {
+      var zoom = zoomURL;
+    };
+  } else {
+    var lat = 39.833333;
+    var lon = -98.585522;
+    var zoom = 5;
+  };
 } else {
+  var lat = 39.833333;
+  var lon = -98.585522;
+  var zoom = 5;
   withoutURL();
   USDM="Most Recent USDM"
-};
-
-//////////////Lat and Longitude based on URL////////////////
-if ((latURL && lonURL) !== undefined && (latURL && lonURL) !== false) {
-  var lat = latURL;
-  var lon = lonURL;
-} else {
-  var lat = 39.8282;
-  var lon = -98.5795;
-};
-
-////////////////////Zoom from URL//////////////////////////
-if (zoomURL !== undefined && zoomURL !== false) {
-  var zoom = zoomURL;
-} else {
-  var zoom = 5;
 };
 
 
